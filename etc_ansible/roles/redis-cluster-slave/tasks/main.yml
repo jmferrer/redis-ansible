@@ -1,0 +1,12 @@
+- name: Install redis
+  apt: name=redis-server state=present update_cache=yes
+
+- name: Configure redis cluster mode
+  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
+  notify: redis-server restart
+
+- name: Install redis-trib dependencies
+  apt: name=ruby-redis state=present
+
+- name: Create slots
+  shell: /usr/share/doc/redis-tools/examples/redis-trib.rb add-node --slave {{ ansible_eth0["ipv4"]["address"] }}:6379 {{ master }}:6379

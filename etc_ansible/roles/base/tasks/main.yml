@@ -1,0 +1,8 @@
+- name: Configure hosts file
+  template: src=hosts.j2 dest=/etc/hosts
+
+- name: Install python-apt
+  shell: apt-get -y install python-apt
+
+- name: Add ca certificates
+  apt: name=ca-certificates state=latest

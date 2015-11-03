@@ -1,0 +1,17 @@
+- name: Install redis
+  apt: name=redis-server state=present update_cache=yes
+
+- name: Configure redis cluster mode
+  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
+  notify: redis-server restart
+
+- name: Install redis-trib dependencies
+  apt: name=ruby-redis state=present
+
+- name: Join nodes to cluster
+  shell: redis-cli cluster meet {{ hostvars[hostvars.keys()[0]].ansible_default_ipv4.address }} 6379
+  when: ansible_eth0["ipv4"]["address"] != hostvars[hostvars.keys()[0]].ansible_default_ipv4.address
+
+- name: Create slots
+  shell: echo "yes" | /usr/share/doc/redis-tools/examples/redis-trib.rb fix 127.0.0.1:6379
+  when: ansible_eth0["ipv4"]["address"] == hostvars[hostvars.keys()[0]].ansible_default_ipv4.address

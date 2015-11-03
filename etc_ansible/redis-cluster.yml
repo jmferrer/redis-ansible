@@ -1,0 +1,15 @@
+- name: Install and Configure Redis Cluster Masters
+  hosts: redis-cluster-master
+  remote_user: ubuntu
+  sudo: yes
+  roles:
+  - base
+  - redis-cluster-master
+
+- name: Install and Configure Redis Cluster Slave
+  hosts: redis-cluster-slave
+  remote_user: ubuntu
+  sudo: yes
+  roles:
+  - base
+  - redis-cluster-slave

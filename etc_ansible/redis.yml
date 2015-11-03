@@ -1,0 +1,7 @@
+- name: Install and configure single redis instance
+  hosts: redis
+  remote_user: ubuntu
+  sudo: yes
+  roles:
+  - base
+  - redis

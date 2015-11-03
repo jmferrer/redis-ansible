@@ -1,0 +1,17 @@
+- name: Install redis
+  apt: name=redis-server state=present update_cache=yes
+
+- name: Configure redis to allow external connections
+  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
+  notify: redis-server restart
+
+- name: Ensure redis-server is started
+  service: name=redis-server state=started
+
+- name: Configure first node as master
+  shell: redis-cli slaveof no one
+  when: ansible_eth0["ipv4"]["address"] == hostvars[hostvars.keys()[0]].ansible_default_ipv4.address
+
+- name: Configure other nodes as replicas
+  shell: redis-cli slaveof {{ hostvars[hostvars.keys()[0]].ansible_default_ipv4.address }} 6379
+  when: ansible_eth0["ipv4"]["address"] != hostvars[hostvars.keys()[0]].ansible_default_ipv4.address

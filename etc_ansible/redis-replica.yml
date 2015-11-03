@@ -1,0 +1,7 @@
+- name: Install and configure a redis replica
+  hosts: redis-replica
+  remote_user: ubuntu
+  sudo: yes
+  roles:
+  - base
+  - redis-replica

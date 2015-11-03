@@ -1,0 +1,37 @@
+# Hosts to deploy Redis Standalone
+# ansible-playbook -i hosts redis.yml
+[redis]
+192.168.42.91
+
+# Hosts to deploy Redis Replica
+# ansible-playbook -i hosts redis-replica.yml
+[redis-replica]
+192.168.42.91
+192.168.42.89
+192.168.42.90
+192.168.42.85
+192.168.42.88
+
+# Hosts to deploy Redis Sentinel
+# ansible-playbook -i hosts redis-sentinel.yml
+[redis-sentinel]
+192.168.42.91
+192.168.42.89
+192.168.42.90
+192.168.42.85
+192.168.42.88
+
+
+# Hosts to deploy Master Redis Cluster
+# ansible-playbook -i hosts redis-cluster.yml
+[redis-cluster-master]
+192.168.42.91
+192.168.42.92
+192.168.42.89
+
+# Hosts to deploy Slave Redis Cluster
+# master is one of the host in redis-cluster-master group
+[redis-cluster-slave]
+192.168.42.85 master=192.168.42.91
+192.168.42.90 master=192.168.42.92
+192.168.42.87 master=192.168.42.89

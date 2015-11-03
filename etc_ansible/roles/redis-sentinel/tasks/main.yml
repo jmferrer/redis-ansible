@@ -1,0 +1,6 @@
+- name: Install redis sentinel
+  apt: name=redis-sentinel state=present update_cache=yes
+
+- name: Configure sentinel
+  template: src=sentinel.conf.j2 dest=/etc/redis/sentinel.conf mode=0644 owner=redis group=redis
+  notify: redis-sentinel restart
