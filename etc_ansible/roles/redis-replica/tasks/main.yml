@@ -5,6 +5,9 @@
   template: src=redis.conf.j2 dest=/etc/redis/redis.conf
   notify: redis-server restart
 
+- name: Ensure redis is restarted NOW if redis.conf changes BEFORE configuring the replica set
+  meta: flush_handlers
+
 - name: Ensure redis-server is started
   service: name=redis-server state=started
 
